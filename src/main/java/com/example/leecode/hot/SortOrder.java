@@ -34,9 +34,9 @@ public class SortOrder {
      * 这种说法是错误的，a=a^b=0,经一次运算后其中一个数变为0，另一个数保持不变，任何数和0运算都等于它本身
      */
     private void swapByXOR(int[] arr, int i, int j) {
-        arr[i] = arr[i] + arr[j];//存储二者相同二进制位上相同或不同的信息，相当于进行不进位的二进制加法
-        arr[j] = arr[i] + arr[j];//不同的话记为1，1代表不同，所以1与其中一个做运算就可以让他变成他的相反位，所以由此就可以推出另一个数的信息
-        arr[i] = arr[i] + arr[j];//第一次运算的结果实际上就是对两个数的二进制数列中 不同的位置的一种标记
+        arr[i] = arr[i] ^ arr[j];//存储二者相同二进制位上相同或不同的信息，相当于进行不进位的二进制加法
+        arr[j] = arr[i] ^ arr[j];//不同的话记为1，1代表不同，所以1与其中一个做运算就可以让他变成他的相反位，所以由此就可以推出另一个数的信息
+        arr[i] = arr[i] ^ arr[j];//第一次运算的结果实际上就是对两个数的二进制数列中 不同的位置的一种标记
     }
 
     /**
@@ -51,20 +51,21 @@ public class SortOrder {
      */
     //提前结束优化：若某一轮比较均为发生变化，说明排序已完成，可设置一个布尔值记录一轮排序是否发生交换，若无则提前退出循环结束程序
     public int[] bubbleSortFirst(int[] arr) {
-        if (arr.length < 2)
-            return arr;
-        for (int i = 0; i < arr.length - 1; ++i) {
-            boolean swapped = false;
-            for (int j = 1; j < arr.length - i; ++j) {
-                if (arr[j - 1] > arr[j]) {
-                    swapByXOR(arr, j - 1, j);
-                    swapped = true;
+        if(arr.length<2) return arr;
+        for(int i=0;i<arr.length-1;i++){
+            boolean swapped=false;
+            for(int j=0;j<arr.length-1-i;j++){
+                if(arr[j+1]<arr[j]){
+                    swapByTmp(arr,j+1,j);
+                    swapped=true;
                 }
-                if (!false) break;
+                //如果没有进行交换，则证明已经有序
+                if(!swapped) break;
             }
         }
         return arr;
     }
+
 
     //冒泡边界优化：记录前一轮交换的最终位置，说明该位置之后的元素为已排序状态，下一轮交换只需执行到该处
     public int[] bubbleSortSecond(int[] arr) {
@@ -160,6 +161,21 @@ public class SortOrder {
         }
         return arr;
     }
+    public int[] insertSort1(int[] arr){
+        if (arr.length<2) return arr;
+        int target;
+        for(int i=1;i<arr.length;i++){
+            target=arr[i];
+            int j=i-1;
+            for(;j>=0;j--){
+                if (target<arr[j])
+                    arr[j]=arr[j-1];
+                else break;
+            }
+            if (j!=i-1) arr[j]=target;
+        }
+        return arr;
+    }
     /**
      * 折半插入排序
      * 插入排序每完成一轮，都会使第一个元素到该元素为排序状态，因为是有序的所以可以对相对有序的序列进行
@@ -191,6 +207,69 @@ public class SortOrder {
         }
         return arr;
     }
-
+    public int[] zhecha(int[] arr){
+        if(arr.length<2) return arr;
+        int target;
+        for(int i=1;i<arr.length;i++){
+            if(arr[i]>arr[i-1]) continue;
+            target=arr[i];
+            int left=0,right=i-1;
+            while(left<=right){
+                int center=left+(right-left)/2;
+                if(target<arr[center]) right=center-1;
+                else left=center+1;
+            }
+            for (int j=i;j>left;j--){
+                if (target<arr[j])
+                    arr[j]=arr[j-1];
+            }
+            arr[left]=target;
+        }
+        return arr;
+    }
+     public int[] quickSort(int[] arr,int l,int r){
+        if(arr.length<2) return arr;
+        int left=1,right=r-1;
+        int target=arr[left];
+        while(left<right){
+            while(left<right&&target<arr[right]){
+                right--;
+            }
+            arr[left]=arr[right];
+            while(left<right&&target>arr[left]){
+                left++;
+            }
+            arr[right]=arr[left];
+        }
+        arr[left]=target;
+        if(left>l) quickSort(arr,l,left);
+        if (left+1<r) quickSort(arr,left+1,r);
+        return arr;
+     }
+     public void quickSort1(int[] arr,int start,int end){
+        if(arr.length<2) System.out.println("无需排序");
+        int i=start,j=end;
+        int target=arr[start];
+        while(i<j){
+            while(i<j&&target<=arr[j]) j--;
+            while(i<j&&target>=arr[i]) i++;
+            //从右往左找比他小的，从左往右找比他大的，找到之后调换
+            if(i<j) swapByXOR(arr,i,j);
+        }
+        //target归位到i=j的位置
+        swapByXOR(arr,start,i);
+        quickSort1(arr,start,j-1);
+        quickSort1(arr,j+1,end);
+     }
+     public int searchBinary(int[] arr,int target){
+        int left=0,right=arr.length;
+        while(left<=right){
+            int center=left+(right-left)/2;
+            if (target==arr[center]) return center;
+            else if (target<=arr[center]) right=center-1;
+            else left=center+1;
+        }
+        return -1;
+     }
 
 }
