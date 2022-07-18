@@ -65,6 +65,23 @@ public class SortOrder {
         }
         return arr;
     }
+    public int[] bs(int[] arr){
+        if(arr.length<2) return arr;
+        for (int i=0;i<arr.length-1;i++){
+            boolean flag=false;
+            for(int j=0;j<arr.length-i-1;j++){
+                if (arr[j+1]<arr[j]){
+                    arr[j+1]=arr[j+1]^arr[j];
+                    arr[j]=arr[j+1]^arr[j];
+                    arr[j+1]=arr[j+1]^arr[j];
+                    flag=true;
+                }
+                //如果没交换则证明已经有序
+                if(!flag) break;
+            }
+        }
+        return arr;
+    }
 
 
     //冒泡边界优化：记录前一轮交换的最终位置，说明该位置之后的元素为已排序状态，下一轮交换只需执行到该处
@@ -261,6 +278,19 @@ public class SortOrder {
         quickSort1(arr,start,j-1);
         quickSort1(arr,j+1,end);
      }
+     public void qs(int[] arr,int left,int right){
+        if(arr.length<2) System.out.println("2");
+        int l=left,r=right;
+        int target=arr[left];
+        while(l<r){
+            while(l<r&&target<=arr[r]) r--;
+            while(l<r&&target>=arr[l]) l++;
+            if(l<r) swapByXOR(arr,l,r);
+        }
+        swapByXOR(arr,left,l);
+        qs(arr,left,r-1);
+        qs(arr,r+1,right);
+     }
      public int searchBinary(int[] arr,int target){
         int left=0,right=arr.length;
         while(left<=right){
@@ -271,5 +301,28 @@ public class SortOrder {
         }
         return -1;
      }
+     public int sb(int[] arr,int target){
+        int left=0,right=arr.length-1;
+        while(left<=right){
+            int cen=left+(right-left)/2;
+            if(cen==target) return 1;
+            else if(target<=arr[cen]) right=cen-1;
+            else left=cen+1;
+        }
+        return -1;
+
+     }
+     //链表后置
+    public ListNode reverseList(ListNode head){
+        ListNode pre=null;
+        ListNode cur=head;
+        while(cur!=null){
+            ListNode next=cur.next;
+            cur.next=pre;
+            pre=cur;
+            cur=next;
+        }
+        return pre;
+    }
 
 }
