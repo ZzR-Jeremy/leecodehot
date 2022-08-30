@@ -1,7 +1,7 @@
 package com.example.leecode.hot;
 
 import java.util.*;
-
+//返回同素异构体
 public class SolutionTwentyThree {
 
     public List<List<String>> groupAnagrams(String[] strs) {
