@@ -1,5 +1,7 @@
 package com.example.leecode.hot;
 
+import com.sun.scenario.effect.Brightpass;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,7 +36,7 @@ public class MinWindows {
             ori.put(c,ori.getOrDefault(c,0)+1);
         }
         int l=0,r=-1;
-        int len=Integer.MIN_VALUE, ansL=-1, ansR=-1;
+        int len=Integer.MAX_VALUE, ansL=-1, ansR=-1;
         int sLen=s.length();
         while(r<sLen){
             ++r;
@@ -82,6 +84,45 @@ public class MinWindows {
             }
         }
         return true;
+    }
+    public String minWindows1(String s,String t){
+        Map<Character,Integer> window=new HashMap<Character,Integer>();
+        Map<Character,Integer> need=new HashMap<Character,Integer>();
+        for(char c:t.toCharArray())
+            need.put(c,need.getOrDefault(c,0)+1);
+            int left=0,right=0;
+            int count=0;//窗口中符合need要求的数量
+            int start=0;//符合最优解的起始位置
+            int len=Integer.MAX_VALUE;//len用来记录最终窗口的长度
+
+        //一次遍历出可行解
+        while(right<s.length()){
+            char c=s.charAt(right);
+            right++;
+            if(need.containsKey(c)){
+                window.put(c,need.getOrDefault(c,0)+1);
+                if (need.get(c).equals(window.get(c))){
+                    count++;
+                }
+            }
+            //缩减左边界，找到符合条件的最优解
+            while(count==need.size()){
+                if (right-left<len){
+                    len=right-left;
+                    start=left;
+                }
+                char d=s.charAt(left);
+                left++;
+                if(need.containsKey(d)){
+                    if (need.get(d).equals(window.get(d))){
+                        count--;
+                    }
+                    window.put(d,window.get(d)-1);
+                }
+            }
+        }
+        return len==Integer.MAX_VALUE?"":s.substring(start,start+len);
+
     }
 
 }
