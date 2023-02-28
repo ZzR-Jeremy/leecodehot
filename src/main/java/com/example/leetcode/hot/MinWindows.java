@@ -1,4 +1,4 @@
-package com.example.leecode.hot;
+package com.example.leetcode.hot;
 
 import java.util.HashMap;
 import java.util.Iterator;

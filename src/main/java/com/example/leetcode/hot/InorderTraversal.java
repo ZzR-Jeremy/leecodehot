@@ -1,6 +1,6 @@
-package com.example.leecode.hot;
+package com.example.leetcode.hot;
 
-import com.example.leecode.datastructure.TreeNode;
+import com.example.leetcode.datastructure.TreeNode;
 
 import java.util.*;
 
