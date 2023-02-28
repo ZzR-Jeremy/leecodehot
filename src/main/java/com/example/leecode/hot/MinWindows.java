@@ -1,7 +1,5 @@
 package com.example.leecode.hot;
 
-import com.sun.scenario.effect.Brightpass;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
