@@ -8,6 +8,7 @@ import java.util.*;
  * 给定一个二叉树的根节点root，返回它的中序遍历
  * root=[1,null,2,3]
  * [1,3,2]
+ * https://leetcode.cn/problems/symmetric-tree/description/
  */
 public class InorderTraversal {
     //递归
